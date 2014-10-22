@@ -116,4 +116,10 @@ object List {
 	// Exercise 3.21
 	def filter2[A](l: List[A])(f: A => Boolean): List[A] = 
 		flatMap(l)(x => if (f(x)) List(x) else Nil:List[A])
+	// Exercise 3.22
+	def addTwoList[A](l: List[A], r: List[A]) = 
+		
+	// Exercise 3.23
+	def zipWith[A, B](l: List[A], r: List[A])(f: (A, A) => B): = 
+
 }
