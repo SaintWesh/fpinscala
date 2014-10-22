@@ -117,9 +117,31 @@ object List {
 	def filter2[A](l: List[A])(f: A => Boolean): List[A] = 
 		flatMap(l)(x => if (f(x)) List(x) else Nil:List[A])
 	// Exercise 3.22
-	def addTwoList[A](l: List[A], r: List[A]) = 
-		
+	def addTwoList(l: List[Int], r: List[Int]):List[Int] = (l, r) match {
+		case (Nil, _) => Nil
+		case (_, Nil) => Nil
+		case (Cons(x, xs), Cons(y, ys)) => Cons(x + y, addTwoList(xs, ys))
+	}
 	// Exercise 3.23
-	def zipWith[A, B](l: List[A], r: List[A])(f: (A, A) => B): = 
+	def zipWith[A, B, C](l: List[A], r: List[B])(f: (A, B) => C):List[C] = (l, r) match {
+		case (Nil, _) => Nil
+		case (_, Nil) => Nil
+		case (Cons(x, xs), Cons(y, ys)) => Cons(f(x, y), zipWith(xs, ys)(f))
+	}
+	// Exercise 3.24
+	def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+		def testEqual[A](a: List[A], b: List[A]): Boolean = (a, b) match {
+			case (_, Nil) => true
+			case (Cons(x, xs), Cons(y, ys)) if (x == y) => testEqual(xs, ys)
+			case _ => false
+		}
+		if (testEqual(sup, sub)) true 
+		else sup match {
+			case Nil => false
+			case (Cons(_, xs)) => hasSubsequence(xs, sub)
+		}
+		
+	}
+	
 
 }
