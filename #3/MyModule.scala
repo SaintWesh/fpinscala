@@ -76,10 +76,11 @@ object List {
 		case _ => foldLeft(ns, 1.0)(_ * _)
 	}
 	def length2[A](l: List[A]) = foldLeft(l, 0)((len, _) => len + 1)
-  // implement reverse in term fo foldLeft
+  // Exercise 3.12 implement reverse in term fo foldLeft 
   def reverse[A](l: List[A]) = foldLeft(l, Nil:List[A])((a, b) => Cons(b,a))
  
   // cool functional programming!!!
+  // Exercise 3.13
 	def foldRightViaFoldLeft[A, B](l: List[A], z: B)(f: (A, B) => B): B = 
 		foldLeft(reverse(l), z)((b, a) => f(a, b))
 
@@ -88,16 +89,31 @@ object List {
 
 	def foldLeftViaFoldRight[A, B](l: List[A], z: B)(f: (B, A) => B): B =
 		foldRight(l, (b: B) => b)((a, g) => b => g(f(b, a)))(z)
-
+	//	Exercise 3.14
 	def append[A](l: List[A], r: List[A]): List[A] =
 		foldRight(l, r)(Cons(_, _))
 
 	def append1[A](l: List[A], r: List[A]): List[A] =
 		foldLeft(l, (b: List[A]) => b)((g, a) => b => g(Cons(a, b)))(r)
-
+  // Exercise 3.15
 	def concatenate[A](ll: List[List[A]]): List[A] = 
 		foldRightViaFoldLeft(ll, Nil:List[A])(append)
-
-
-
+	// Exercise 3.16
+	def add1(l: List[Int]):List[Int] = 
+		foldRight(l, Nil:List[Int])((x, y) => Cons(x + 1, y))
+	// Exercise 3.17
+	def map(l: List[Double]):List[String] = 
+		foldRight(l, Nil:List[String])((x, y) => Cons(x.toString, y))
+	// Exercise 3.18
+	def map[A, B](l: List[A])(f: A => B) = 
+		foldRight(l, Nil:List[B])((a, b) => Cons(f(a), b))
+	// Exercise 3.19
+	def filter[A](as: List[A])(f: A => Boolean): List[A] = 
+		foldRight(as, Nil:List[A])((a, b) => if (f(a)) Cons(a, b) else b)
+	// Exercise 3.20
+	def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] =
+		foldRight(as, Nil:List[B])((a, b) => append(f(a), b))
+	// Exercise 3.21
+	def filter2[A](l: List[A])(f: A => Boolean): List[A] = 
+		flatMap(l)(x => if (f(x)) List(x) else Nil:List[A])
 }
