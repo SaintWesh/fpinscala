@@ -56,19 +56,18 @@ object List {
 	// use foldRight
 	def sum(ns: List[Int]) = foldRight(ns, 0)(_ + _)
 	def product(ns: List[Double]) = foldRight(ns, 1.0)(_ * _)
-	def product2(ns: List[Double]) = ns match {
-		case Cons(0, _) => 0
-		case _ => foldRight(ns, 1.0)(_ * _)
-	}
-	
-	def length[A](as: List[A]): Int = foldRight(as, 0)((_, len) => 1 + len)
+	// Exetcise 3.7 impossible
 
+
+	// Exercise 3.9
+	def length[A](as: List[A]): Int = foldRight(as, 0)((_, len) => 1 + len)
+	// Exercise 3.10
 	@annotation.tailrec
 	def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B = as match {
 		case Nil => z
 		case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
 	}
-
+	// Exercise 3.11
 	// use foldLeft
 	def sum2(ns: List[Int]) = foldLeft(ns, 0)(_ + _)
 	def product3(ns: List[Double]) = ns match {
@@ -128,6 +127,28 @@ object List {
 		case (_, Nil) => Nil
 		case (Cons(x, xs), Cons(y, ys)) => Cons(f(x, y), zipWith(xs, ys)(f))
 	}
+	def take[A](l: List[A], n: Int): List[A] = 
+		if (n <= 0) Nil
+		else l match {
+			case Nil => Nil
+			case Cons(x, xs) => Cons(x, take(xs, n - 1))
+		}
+
+  def takeWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+  	case Cons(x, xs) if (f(x)) => Cons(x, takeWhile(xs, f))
+  	case _ => Nil
+  }
+
+  def forall[A](l: List[A], f: A => Boolean): Boolean = l match {
+  	case Cons(x,xs) => if (!f(x)) false else forall(xs, f)
+  	case _ => true
+  }
+  
+  def exists[A](l:List[A], f: A => Boolean): Boolean = l match {
+  	case Cons(x, xs) => if (f(x)) true else exists(xs, f)
+  	case _ => false
+  }
+		
 	// Exercise 3.24
 	def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
 		def testEqual[A](a: List[A], b: List[A]): Boolean = (a, b) match {
