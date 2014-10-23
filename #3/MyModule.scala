@@ -191,5 +191,20 @@ object Tree {
 		case Leaf(v) => Leaf(f(v))
 		case Branch(l, r) => Branch(map(l)(f), map(r)(f))
 	}
-	 
+	// Exercise 3.29
+	def foldLeft[A, B](t: Tree[A])(f: A => B)(g: (B, B) => B): B = t match {
+		case Leaf(v) => f(v)
+		case Branch(l, r) => g(foldLeft(l)(f)(g), foldLeft(r)(f)(g))
+		//g(foldLeft(r, foldLeft(l, b)(f, g))(f, g), t)
+	}
+	def size1[A](t: Tree[A]): Int = foldLeft(t)(x => 1)((l, r) => l + r + 1)
+	def maximum1(t: Tree[Int]): Int = 
+		foldLeft(t)(x => x)(_ max _)
+	def depth1[A](t: Tree[A]): Int = 
+		foldLeft(t)(x => 1)(_ max _)
+	def map1[A, B](t: Tree[A])(f: A => B): Tree[B] = 
+		foldLeft(t)(x => Leaf(f(x)): Tree[B])(Branch(_, _))
+	def toString[A](t: Tree[A]): String = 
+		foldLeft(t)(_.toString)("(" + _ +", " + _ + ")")	
+
 }
