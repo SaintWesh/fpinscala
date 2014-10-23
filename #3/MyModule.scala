@@ -141,12 +141,12 @@ object List {
 
   def forall[A](l: List[A], f: A => Boolean): Boolean = l match {
   	case Cons(x,xs) => if (!f(x)) false else forall(xs, f)
-  	case _ => true
+  	case Nil => true
   }
   
   def exists[A](l:List[A], f: A => Boolean): Boolean = l match {
   	case Cons(x, xs) => if (f(x)) true else exists(xs, f)
-  	case _ => false
+  	case Nil => false
   }
 		
 	// Exercise 3.24
@@ -158,11 +158,38 @@ object List {
 		}
 		if (testEqual(sup, sub)) true 
 		else sup match {
+			case Cons(_, xs) => hasSubsequence(xs, sub)
 			case Nil => false
-			case (Cons(_, xs)) => hasSubsequence(xs, sub)
-		}
-		
+		}	
 	}
 	
 
+}
+
+sealed trait Tree[+A]
+case class Leaf[A](value: A) extends Tree[A]
+case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+
+object Tree {
+	// Exercise 3.25
+	def size[A](t: Tree[A]): Int = t match {
+		case Leaf(_) => 1
+		case Branch(l, r) => size(l) + size(r) + 1
+	}
+	 // Exercise 3.26	
+	def maximum(t: Tree[Int]): Int = t match {
+		case Leaf(v) => v
+		case Branch(l, r) => maximum(l) max maximum(r)
+	}
+	// Exercise 3.27	
+	def depth[A](t: Tree[A]): Int = t match {
+		case Leaf(_) => 1
+		case Branch(l, r) => (depth(l) max depth(r)) + 1
+	}
+	// Exercise 3.28	
+	def map[A, B](t: Tree[A])(f: A => B): Tree[B] = t match {
+		case Leaf(v) => Leaf(f(v))
+		case Branch(l, r) => Branch(map(l)(f), map(r)(f))
+	}
+	 
 }
