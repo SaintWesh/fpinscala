@@ -151,12 +151,13 @@ object List {
 		
 	// Exercise 3.24
 	def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
-		def testEqual[A](a: List[A], b: List[A]): Boolean = (a, b) match {
+		def testMatch[A](a: List[A], b: List[A]): Boolean = (a, b) match {
 			case (_, Nil) => true
-			case (Cons(x, xs), Cons(y, ys)) if (x == y) => testEqual(xs, ys)
+			case (Cons(x, xs), Cons(y, ys)) if (x == y) => testMatch(xs, ys)
 			case _ => false
 		}
-		if (testEqual(sup, sub)) true 
+		// Nil is subsequence of Nil
+		if (testMatch(sup, sub)) true 
 		else sup match {
 			case Cons(_, xs) => hasSubsequence(xs, sub)
 			case Nil => false
