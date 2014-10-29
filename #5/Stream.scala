@@ -95,15 +95,14 @@ sealed trait Stream[+A] {
 	def hasSubsequence[A](s: Stream[A]): Boolean = tails exists (_ startsWith s)
 	// Exercise 5.16
 	def scanRight[B](z: B)(f: (A, =>B) => B): Stream[B] = 
-		foldRight((z, Stream(z)))((a, b) => (f(a, b._1), Stream.cons(f(a, b._1), b._2)))._2
+		foldRight((z, Stream(z)))((a, b) => {
+			val t = f(a, b._1)
+			(t, Stream.cons(t, b._2))
+			})._2
 
 
 	def tailsViaScanRight: Stream[Stream[A]] = 
 		scanRight(Stream.empty: Stream[A])(Stream.cons(_, _))
-	
-
-
-
 }
 
 case object Empty extends Stream[Nothing]
