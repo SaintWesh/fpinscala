@@ -13,16 +13,19 @@ sealed trait Option[+A] {
 	def flatMap1[B](f: A => Option[B]): Option[B] =
 		map(f) getOrElse None
 	
+  // Because the return type must be a supertype of the curreent type
 	def getOrElse[B >: A](default: => B): B = this match {
 		case None => default
 		case Some(a) => a
 	}
 	
+  // Because the return type must be a supertype of the curreent type
 	def orElse[B >: A](ob: => Option[B]): Option[B] = this match {
 		case None => ob
 		case _ => this
 	}
 
+  // Because the return type must be a supertype of the curreent type
 	def orElse1[B >: A](ob: => Option[B]): Option[B] =
 		map(Some(_)) getOrElse ob
 
@@ -35,7 +38,7 @@ sealed trait Option[+A] {
 		flatMap(a => if (f(a)) Some(a) else None)
 	
 }
-//sealed trait Option[+A]
+sealed trait Option[+A]
 case class Some[+A](get: A)extends Option[A]
 case object None extends Option[Nothing]
 
@@ -45,7 +48,7 @@ object Option {
     if (xs.isEmpty) None
     else Some(xs.sum / xs.length)
 
-  def variance(xs: Seq[Double]): Option[Double] = 
+  def variance(xs: Seq[Double]): Option[Double] =
     mean(xs) flatMap (m => mean(xs.map(x => math.pow(x - m, 2))))
   // Exercise 4.3 
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = 

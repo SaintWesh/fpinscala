@@ -4,17 +4,20 @@ sealed trait Either[+E, +A] {
 	    case Right(a) => Right(f(a))
 	    case Left(e) => Left(e)
 	  }
-  
+  // Because the return type must be a supertype of the curreent type
 	def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] =
 	  this match {
 	    case Left(e) => Left(e)
 	    case Right(a) => f(a)
 	  }
+	  
+  // Because the return type must be a supertype of the curreent type
 	def orElse[EE >: E, AA >: A](b: => Either[EE, AA]): Either[EE, AA] =
 	  this match {
 	    case Left(_) => b
 	    case Right(a) => Right(a)
 	  }
+  // Because the return type must be a supertype of the curreent type
 	def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = 
 		for { a <- this; b1 <- b } yield f(a,b1)
 }
