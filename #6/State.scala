@@ -153,10 +153,13 @@ object State {
   def set[S](s: S): State[S, Unit] = State(_ => ((), s))
   def set_1[S](s: S): State[S, Unit] = State(_ => ((), s))
   
-  def modify[S](f: S => S): State[S, Unit] = for{
-    s<-get
+  def modify[S](f: S => S): State[S, Unit] = for {
+    s <- get
     _ <- set(f(s))
   } yield ()
+  // using  flatMap
+  def modify_1[S](f: S => S): State[S, Unit] = 
+  	get flatMap (s => set(f(s)))
   
 }
 //
